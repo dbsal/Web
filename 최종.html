@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>만화책 구매사이트</title>
+    <style>
+        /* 기본 스타일 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .icons {
+            display: flex;
+            gap: 15px;
+            position: relative;
+        }
+
+        .icons a {
+            text-decoration: none;
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        section {
+            display: none;
+            padding: 20px;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        .search-bar {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            width: 60%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .cart-items, .alarm-items {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .cart-item, .alarm-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cart-item:last-child, .alarm-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item p, .alarm-item p {
+            margin: 0;
+        }
+        .my-info {
+        margin-bottom: 20px;
+    }
+
+    .my-details h3 {
+        margin-top: 20px;
+        font-size: 18px;
+        color: #333;
+    }
+
+    .my-details ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 10px 0;
+    }
+
+    .my-details ul li {
+        font-size: 14px;
+        margin: 5px 0;
+        color: #555;
+    }
+
+    .recent-products {
+        display: flex;
+        gap: 15px;
+        margin-top: 10px;
+    }
+
+    .recent-products .book {
+        text-align: center;
+    }
+
+    .recent-products .book img {
+        width: 60px;
+        height: auto;
+        margin-bottom: 5px;
+    }
+
+    .recent-products .book p {
+        font-size: 12px;
+        color: #555;
+    }
+
+    #searchResults {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .book {
+        display: flex;
+        gap: 15px;
+        padding: 15px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        align-items: center;
+    }
+
+    .book img {
+        width: 80px;
+        height: auto;
+        border-radius: 5px;
+    }
+
+    .book-info {
+        flex: 1;
+    }
+
+    .book-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    .book-author {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 5px;
+    }
+
+    .book-price {
+        font-size: 14px;
+        color: #e74c3c;
+        font-weight: bold;
+    }
+
+    .book-rating {
+        font-size: 14px;
+        color: #555;
+        margin-top: 5px;
+    }
+
+    .additional-info {
+        font-size: 12px;
+        color: #777;
+        margin-top: 5px;
+    }
+
+    .buy-button {
+        padding: 8px 12px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .buy-button:hover {
+        background-color: #2980b9;
+    }
+
+    </style>
+</head>
+<body>
+
+    <!-- 상단 헤더 -->
+    <header>
+        <div class="logo" onclick="showSearchOnly()">
+            <img src="C:\HTML 기말\아카이브\코리락쿠마.jpg" alt="로고">
+        </div>
+        <div class="icons">
+            <a onclick="showSection('my')" title="마이">👤</a>
+            <a onclick="showSection('alarm')" title="알림">🔔</a>
+            <a onclick="showSection('cart')" title="장바구니">🛒</a>
+        </div>
+    </header>
+
+    <!-- 섹션: 홈 -->
+    <section id="home" class="active">
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="만화책을 검색하세요">
+            <button class="search-button" onclick="searchBooks()">검색</button>
+        </div>
+        <div id="searchResults"></div>
+    </section>
+
+     <!-- 섹션: 마이페이지 -->
+<section id="my">
+    <h2>마이페이지</h2>
+    <div class="my-info">
+        <p><strong>닉네임:</strong> 감자님</p>
+        <p><strong>등급:</strong> 일반 회원</p>
+    </div>
+    <hr>
+    <div class="my-details">
+        <h3>나의 혜택</h3>
+        <ul>
+            <li><strong>적립금:</strong> 12,340원</li>
+            <li><strong>쿠폰:</strong> 3장 사용 가능</li>
+        </ul>
+        <hr>
+        <h3>주문 내역</h3>
+        <ul>
+            <li>2024-01-15: <strong>하이큐!! 36</strong> - 배송 완료</li>
+            <li>2024-01-10: <strong>주술회전 0</strong> - 배송 준비 중</li>
+        </ul>
+        <hr>
+        <h3>최근 본 상품</h3>
+        <div class="recent-products">
+            <div class="book">
+                <img src="C:\HTML 기말\아카이브\하이큐 36.jpg" alt="하이큐!! 36">
+                <p>하이큐!! 36</p>
+            </div>
+            <div class="book">
+                <img src="C:\HTML 기말\아카이브\주술회전 0.jpg" alt="주술회전 0">
+                <p>주술회전 0</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- 섹션: 알림 -->
+    <section id="alarm">
+        <h2>알림</h2>
+        <div class="alarm-items" id="alarmItems">
+            <div class="alarm-item">
+                <p>📣 새로운 만화책이 추가되었습니다!</p>
+                <p>2024-01-15</p>
+            </div>
+            <div class="alarm-item">
+                <p>🎉 할인 이벤트가 진행 중입니다!</p>
+                <p>2024-01-10</p>
+            </div>
+            <div class="alarm-item">
+                <p>🛍️ 주문하신 상품이 발송되었습니다.</p>
+                <p>2024-01-05</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 섹션: 장바구니 -->
+    <section id="cart">
+        <h2>장바구니</h2>
+        <div class="cart-items" id="cartItems">
+            <p>장바구니가 비어 있습니다.</p>
+        </div>
+    </section>
+
+    <script>
+        // 섹션 전환 함수
+        function showSection(sectionId) {
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+
+        // 로고 클릭 시 검색창만 표시
+        function showSearchOnly() {
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            const homeSection = document.getElementById('home');
+            homeSection.classList.add('active');
+            const searchResults = document.getElementById('searchResults');
+            searchResults.innerHTML = ''; // 검색 결과 초기화
+        }
+  // 장바구니에 책 추가
+        function addToCart(title, price) {
+            cart.push({ title, price });
+            updateCart();
+        }
+
+        // 장바구니 업데이트
+        function updateCart() {
+            const cartItems = document.getElementById('cartItems');
+            cartItems.innerHTML = '';
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>장바구니가 비어 있습니다.</p>';
+                return;
+            }
+            cart.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.classList.add('cart-item');
+                cartItem.innerHTML = `
+                    <p>${item.title}</p>
+                    <p>${item.price}</p>
+                `;
+                cartItems.appendChild(cartItem);
+            });
+        }
+
+        // 책 검색
+        function searchBooks() {
+        const query = document.getElementById('search').value.toLowerCase();
+        const searchResults = document.getElementById('searchResults');
+        searchResults.innerHTML = '';
+
+        // 책 데이터
+        const books = [
+            { title: '하이큐!! 36', author: '후루다테 하루이치', price: '₩4,950', img: "C:/HTML 기말/아카이브/하이큐 36.jpg" },
+            { title: '하이큐!! 37', author: '후루다테 하루이치', price: '₩4,950', img: "C:/HTML 기말/아카이브/하이큐 37.jpg" },
+            { title: '하이큐!! 10', author: '후루다테 하루이치', price: '₩4,950', img: "C:/HTML 기말/아카이브/하이큐 10.jpg" },
+            { title: '하이큐!! 11', author: '후루다테 하루이치', price: '₩4,950', img: "C:/HTML 기말/아카이브/하이큐 11.jpg" },
+            { title: '하이큐!! 43', author: '후루다테 하루이치', price: '₩4,950', img: "C:/HTML 기말/아카이브/하이큐 37.jpg" },
+            { title: '너에게 닿기를 10', author: '시이나 카루호', price: '₩4,320', img: "C:/HTML 기말/아카이브/너에게 닿기를 10.jpg" },
+            { title: '너에게 닿기를 2', author: '시이나 카루호', price: '₩4,320', img: "C:/HTML 기말/아카이브/너에게 닿기를 2.jpg" },
+            { title: '너에게 닿기를 26', author: '시이나 카루호', price: '₩4,320', img: "C:/HTML 기말/아카이브/너에게 닿기를 16.jpg" },
+            { title: '너에게 닿기를 28', author: '시이나 카루호', price: '₩4,320', img: "C:/HTML 기말/아카이브/너에게 닿기를 28.jpg" },
+            { title: '주술회전 0', author: '아쿠타미 게게', price: '₩4,950', img: "C:/HTML 기말/아카이브/주술회전 0.jpg" },
+            { title: '주술회전 1', author: '아쿠타미 게게', price: '₩4,950', img: "C:/HTML 기말/아카이브/주술회전 1.jpg" },
+            { title: '주술회전 2', author: '아쿠타미 게게', price: '₩4,950', img: "C:/HTML 기말/아카이브/주술회전 2.jpg" },
+            { title: '주술회전 3', author: '아쿠타미 게게', price: '₩4,950', img: "C:/HTML 기말/아카이브/주술회전 3.jpg" },
+            { title: '주술회전 4', author: '아쿠타미 게게', price: '₩4,950', img: "C:/HTML 기말/아카이브/주술회전 4.jpg" },
+            { title: '사카모토 데이즈 1', author: '스즈키 유우토', price: '₩5,400', img: "C:/HTML 기말/아카이브/사카모토 데이즈 1.jpg" },
+            { title: '사카모토 데이즈 2', author: '스즈키 유우토', price: '₩5,400', img: "C:/HTML 기말/아카이브/사카모토 데이즈 2.jpg" },
+            { title: '사카모토 데이즈 4', author: '스즈키 유우토', price: '₩5,400', img: "C:/HTML 기말/아카이브/사카모토 데이즈 4.jpg" },
+            { title: '사카모토 데이즈 6', author: '스즈키 유우토', price: '₩5,400', img: "C:/HTML 기말/아카이브/사카모토 데이즈 6.jpg" },
+            { title: '사카모토 데이즈 8', author: '스즈키 유우토', price: '₩5,400', img: "C:/HTML 기말/아카이브/사카모토 데이즈 8.jpg" },
+            { title: '사카모토 데이즈 13', author: '스즈키 유우토', price: '₩5,400', img: "C:/HTML 기말/아카이브/사카모토 데이즈 13.jpg" },
+        ];
+
+        // 검색어에 따라 필터링
+        const filteredBooks = books.filter(book =>
+            book.title.toLowerCase().includes(query)
+        );
+
+        // 결과가 없을 경우 메시지 표시
+        if (filteredBooks.length === 0) {
+            searchResults.innerHTML = '<p>검색 결과가 없습니다.</p>';
+            return;
+        }
+
+        // 결과 출력
+        filteredBooks.forEach(book => {
+            const bookDiv = document.createElement('div');
+            bookDiv.classList.add('book');
+            bookDiv.innerHTML = `
+                <img src="${book.img}" alt="${book.title}">
+                <div class="book-info">
+                    <p class="book-title">${book.title}</p>
+                    <p class="book-author">작가: ${book.author}</p>
+                    <p class="book-price">${book.price}</p>
+                    <button class="buy-button" onclick="addToCart('${book.title}', '${book.price}')">장바구니에 추가</button>
+                </div>
+            `;
+            searchResults.appendChild(bookDiv);
+        });
+    }
+    </script>
+</body>
+</html>
