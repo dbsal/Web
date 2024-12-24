@@ -300,19 +300,24 @@
     <!-- 섹션: 장바구니 -->
     <section id="cart">
         <h2>장바구니</h2>
+        <div class="cart-search">
+            <input type="text" id="cartSearch" placeholder="">
+            <button class="search-button" onclick="searchCart()">검색</button>
+        </div>
         <div class="cart-items" id="cartItems">
             <p>장바구니가 비어 있습니다.</p>
         </div>
     </section>
 
     <script>
-        // 섹션 전환 함수
-        function showSection(sectionId) {
-            document.querySelectorAll('section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(sectionId).classList.add('active');
-        }
+        
+    // 섹션 전환 함수
+    function showSection(sectionId) {
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.remove('active'); // 모든 섹션 숨기기
+        });
+        document.getElementById(sectionId).classList.add('active'); // 선택된 섹션 활성화
+    }
 
 
         // 로고 클릭 시 검색창만 표시
@@ -325,11 +330,14 @@
             const searchResults = document.getElementById('searchResults');
             searchResults.innerHTML = ''; // 검색 결과 초기화
         }
-  // 장바구니에 책 추가
+        let cart = []; // 장바구니 데이터 저장 배열
+
+        // 책을 장바구니에 추가
         function addToCart(title, price) {
-            cart.push({ title, price });
-            updateCart();
-        }
+        cart.push({ title, price }); // 제목과 가격 저장
+        alert(`${title}이(가) 장바구니에 추가되었습니다.`);
+        updateCart(); // 장바구니 화면 업데이트
+    }
 
         // 장바구니 업데이트
         function updateCart() {
@@ -349,6 +357,27 @@
                 cartItems.appendChild(cartItem);
             });
         }
+        // 장바구니 화면 업데이트
+    function updateCart() {
+        const cartItems = document.getElementById('cartItems'); // 장바구니 항목 표시 영역
+        cartItems.innerHTML = ''; // 초기화
+
+        if (cart.length === 0) {
+            cartItems.innerHTML = '<p>장바구니가 비어 있습니다.</p>';
+            return;
+        }
+
+        // 장바구니에 있는 모든 항목 표시
+        cart.forEach(item => {
+            const cartItem = document.createElement('div');
+            cartItem.classList.add('cart-item');
+            cartItem.innerHTML = `
+                <p>${item.title}</p>
+                <p>${item.price}</p>
+            `;
+            cartItems.appendChild(cartItem);
+        });
+    }
 
         // 책 검색
         function searchBooks() {
@@ -407,6 +436,8 @@
             searchResults.appendChild(bookDiv);
         });
     }
+    
     </script>
 </body>
 </html>
+
