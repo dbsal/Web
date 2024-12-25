@@ -228,11 +228,14 @@
             <img src="C:\HTML 기말\아카이브\코리락쿠마.jpg" alt="로고">
         </div>
         <div class="icons">
+            <a onclick="showSection('login')" title="로그인">🔐</a>
             <a onclick="showSection('my')" title="마이">👤</a>
             <a onclick="showSection('alarm')" title="알림">🔔</a>
             <a onclick="showSection('cart')" title="장바구니">🛒</a>
         </div>
+    
     </header>
+    
 
     <!-- 섹션: 홈 -->
     <section id="home" class="active">
@@ -243,10 +246,20 @@
         <div id="searchResults"></div>
     </section>
 
+    <!-- 섹션: 로그인 -->
+    <section id="login">
+        <h2>로그인</h2>
+        <form name="login">
+            <p>ID: <input type="text" name="userId"></p>
+            <p>비밀번호: <input type="password" name="passwd"></p>
+            <p><input type="button" value="로그인" onclick="getInput()"></p>
+        </form>
+    </section>
+
      <!-- 섹션: 마이페이지 -->
-<section id="my">
-    <h2>마이페이지</h2>
-    <div class="my-info">
+    <section id="my">
+        <h2>마이페이지</h2>
+        <div class="my-info">
         <p><strong>닉네임:</strong> 감자님</p>
         <p><strong>등급:</strong> 일반 회원</p>
     </div>
@@ -309,15 +322,25 @@
         </div>
     </section>
 
-    <script>
-        
+    <script>    
     // 섹션 전환 함수
     function showSection(sectionId) {
-        document.querySelectorAll('section').forEach(section => {
-            section.classList.remove('active'); // 모든 섹션 숨기기
-        });
-        document.getElementById(sectionId).classList.add('active'); // 선택된 섹션 활성화
-    }
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+    // 로그인 입력 처리
+    function getInput() {
+            const id = document.login.userId;
+            const pw = document.login.passwd;
+            if (pw.value.length <= 5) {
+                alert(`${id.value}님 패스워드를 변경하세요`);
+            } else {
+                alert(`${id.value}님 환영합니다`);
+            }
+        }
 
 
         // 로고 클릭 시 검색창만 표시
