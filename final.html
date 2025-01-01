@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -314,7 +315,7 @@
     <section id="cart">
         <h2>장바구니</h2>
         <div class="cart-search">
-            <input type="text" id="cartSearch" placeholder="">
+            <input type="text" id="cartSearch" placeholder="장바구니에서 검색">
             <button class="search-button" onclick="searchCart()">검색</button>
         </div>
         <div class="cart-items" id="cartItems">
@@ -401,6 +402,33 @@
             cartItems.appendChild(cartItem);
         });
     }
+    // 장바구니 검색 함수
+    function searchCart() {
+        const query = document.getElementById('cartSearch').value.toLowerCase(); // 검색어 가져오기
+        const cartItems = document.getElementById('cartItems');
+        cartItems.innerHTML = ''; // 기존 항목 초기화
+
+        // 검색 결과 필터링
+        const filteredCart = cart.filter(item =>
+            item.title.toLowerCase().includes(query)
+        );
+
+        if (filteredCart.length === 0) {
+            cartItems.innerHTML = '<p>검색 결과가 없습니다.</p>';
+            return;
+        }
+
+        // 검색 결과 출력
+        filteredCart.forEach(item => {
+            const cartItem = document.createElement('div');
+            cartItem.classList.add('cart-item');
+            cartItem.innerHTML = `
+                <p>${item.title}</p>
+                <p>${item.price}</p>
+            `;
+            cartItems.appendChild(cartItem);
+        });
+    }
 
         // 책 검색
         function searchBooks() {
@@ -463,4 +491,5 @@
     </script>
 </body>
 </html>
+
 
